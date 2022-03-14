@@ -26,7 +26,7 @@ public class Main {
 //             } catch (Exception e){
 //            return;
 //    }
-        File file = new File("src/repo/uploads/file.txt");
+        File file = new File("src/main/java/it/itcubeconsulting/progettoPersona/constants/uploads/prova.txt");
         if (file.exists()){
             System.out.println("Il file esiste");
             System.out.println(file.getPath());

@@ -2,12 +2,12 @@ package it.itcubeconsulting.progettoPersona.controller;
 
 import it.itcubeconsulting.progettoPersona.model.Persona;
 
+import java.io.*;
 import java.util.*;
 
 public class PersoneController implements IpersonaController {
 
-   private ArrayList<Persona> lista = new ArrayList<Persona>();
-
+    private ArrayList<Persona> lista = new ArrayList<Persona>();
 
 
     @Override
@@ -70,5 +70,60 @@ public class PersoneController implements IpersonaController {
             }
         }
         return (persona);
+    }
+
+    @Override
+    public void scriviFile(Persona persona) throws IOException {
+        BufferedWriter bw = new BufferedWriter(new FileWriter("src/main/java/it/itcubeconsulting/progettoPersona/constants/uploads/prova.txt", true));
+        String nome = persona.getNome();
+        String cognome = persona.getCognome();
+        bw.write(nome + " " + cognome);
+        bw.newLine();
+        bw.close();
+    }
+
+    @Override
+    public void leggiFile() {
+
+    }
+
+    @Override
+    public void modificaFile(Persona persona) {
+
+    }
+
+    @Override
+    public void cancellaFile(Persona persona) throws IOException {
+
+        File tempDB = new File("src/main/java/it/itcubeconsulting/progettoPersona/constants/uploads/tempDB.txt");
+        File db = new File("src/main/java/it/itcubeconsulting/progettoPersona/constants/uploads/prova.txt");
+        ListIterator<Persona> li = lista.listIterator();
+        String nome = persona.getNome();
+        String cognome = persona.getCognome();
+        boolean b = false;
+
+        //BufferedReader br = new BufferedReader( new FileReader( db ) );
+        BufferedWriter bw = new BufferedWriter(new FileWriter(tempDB));
+
+        Iterator<Persona> i = lista.iterator();
+        while (i.hasNext()) {
+            Persona p = i.next();
+            if (p.getNome().equals(nome) && (p.getCognome().equals(cognome))) {
+                i.remove();
+                b = true;
+                bw.write(String.valueOf(li));
+                bw.flush();
+                bw.newLine();
+            } else {
+                System.out.println("nome richiesto non trovato");
+            }
+            b = false;
+        }
+        bw.close();
+
+        db.delete();
+
+        tempDB.renameTo(db);
+
     }
 }
