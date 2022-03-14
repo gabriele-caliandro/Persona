@@ -16,8 +16,5 @@ public interface IpersonaController {
 
     public Persona modifica(Persona persona);
 
-    public void scriviFile(Persona persona) throws IOException;
-    public void leggiFile();
-    public void modificaFile(Persona persona);
-    public void cancellaFile(Persona persona) throws IOException;
+
 }
