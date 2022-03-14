@@ -1,11 +1,15 @@
 package it.itcubeconsulting.progettoPersona.model;
 
+import java.util.UUID;
+
 import java.io.Serializable;
 
 public class Persona {
 
     private String nome;
     private String cognome;
+
+
 
     public Persona(String nome, String cognome) {
         this.nome = nome;
