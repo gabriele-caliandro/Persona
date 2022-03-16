@@ -8,11 +8,11 @@ import java.util.List;
 
 public interface IpersonaController {
 
-    public void inserisci(Persona persona);
+    public void inserisci(Persona persona) throws IOException, ClassNotFoundException;
 
-    public List<Persona> visualizza();
+    public List<Persona> visualizza() throws IOException, ClassNotFoundException;
 
-    public boolean cancella(Persona persona);
+    public boolean cancella(Persona persona) throws IOException;
 
     public Persona modifica(Persona persona);
 

@@ -1,6 +1,7 @@
 package it.itcubeconsulting.progettoPersona.controller;
 
 import it.itcubeconsulting.progettoPersona.model.Persona;
+import it.itcubeconsulting.progettoPersona.repository.RepositoryPersona;
 
 import java.io.*;
 import java.util.*;
@@ -8,10 +9,17 @@ import java.util.*;
 public class PersoneController implements IpersonaController {
 
     private ArrayList<Persona> lista = new ArrayList<Persona>();
+    RepositoryPersona repositoyController = new RepositoryPersona();
+
+    public PersoneController() throws IOException {
+    }
 
 
     @Override
-    public void inserisci(Persona persona) {
+    public void inserisci(Persona persona) throws IOException, ClassNotFoundException {
+        Persona personaToFile = new Persona(persona.getNome(),persona.getCognome());
+        repositoyController.inserisciPersonaFile(personaToFile);
+
         lista.add(persona);
 
         // inderire nella db
@@ -21,7 +29,7 @@ public class PersoneController implements IpersonaController {
     }
 
     @Override
-    public List<Persona> visualizza() {
+    public List<Persona> visualizza() throws IOException, ClassNotFoundException {
 
         Iterator<Persona> i = lista.iterator();
         if (lista.isEmpty()) {
@@ -31,16 +39,19 @@ public class PersoneController implements IpersonaController {
                 Persona p = i.next();
                 System.out.println(p);
             }
-        }
+        } repositoyController.leggiPersonaFile();
         return null;
     }
 
     @Override
-    public boolean cancella(Persona persona) {
+    public boolean cancella(Persona persona) throws IOException {
 
         boolean bool = false;
         String n = persona.getNome();
         String c = persona.getCognome();
+
+        repositoyController.cancellaPersonaFIle(new Persona(n,c));
+
         Iterator<Persona> i = lista.iterator();
         while (i.hasNext()) {
             Persona p = i.next();
@@ -56,6 +67,7 @@ public class PersoneController implements IpersonaController {
         }
 
         return bool;
+
     }
 
     @Override
