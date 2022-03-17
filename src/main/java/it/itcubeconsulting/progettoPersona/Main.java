@@ -13,8 +13,7 @@ public class Main {
         Scanner scan = new Scanner(System.in);
         PersoneController personac = new PersoneController();
 
-
-
+        boolean end = false;
         int scelta;
         do {
             System.out.println("1.INSERISCI");
@@ -27,8 +26,6 @@ public class Main {
             // scelta = scan.nextInt();
             scelta = scan.nextInt();
 
-
-            /////////////
 
             switch (scelta) {
 
@@ -67,9 +64,13 @@ public class Main {
                     personac.modifica(new Persona(nome2,cognome2));
 
                     break;
+                case 0:
+                    end = true;
+                    break;
             }
         }
         while (scelta == 1 || scelta == 2 || scelta == 3 || scelta == 4);
+     //   while (!end);
     }
 }
 

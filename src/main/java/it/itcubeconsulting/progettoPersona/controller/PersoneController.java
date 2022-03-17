@@ -19,7 +19,6 @@ public class PersoneController implements IpersonaController {
     public void inserisci(Persona persona) throws IOException, ClassNotFoundException {
         Persona personaToFile = new Persona(persona.getNome(),persona.getCognome());
         repositoyController.inserisciPersonaFile(personaToFile);
-
         lista.add(persona);
 
         // inderire nella db
@@ -50,14 +49,13 @@ public class PersoneController implements IpersonaController {
         String n = persona.getNome();
         String c = persona.getCognome();
 
-        repositoyController.cancellaPersonaFIle(new Persona(n,c));
-
         Iterator<Persona> i = lista.iterator();
         while (i.hasNext()) {
             Persona p = i.next();
             if (p.getNome().equals(n) && (p.getCognome().equals(c))) {
                 i.remove();
                 bool = true;
+                repositoyController.cancellaPersonaFIle(new Persona(n,c));
                 System.out.println("Nome " + n + " " + c + " cancellati con successo");
             } else {
                 System.out.println("nome richiesto non trovato");

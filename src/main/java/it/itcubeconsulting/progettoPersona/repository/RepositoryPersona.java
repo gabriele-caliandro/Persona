@@ -13,11 +13,11 @@ import java.util.List;
 
 public class RepositoryPersona implements IrepositoryPersona, Serializable {
 
-    String filename = "tempDb.txt";
-    File file = new File("tempDb.txt");
+
+    File file = new File("src\\main\\resources\\tempDb.txt");
+    String filename = "src\\main\\resources\\tempDb.txt";
     private ArrayList<Persona> lista = new ArrayList<Persona>();
-    public FileReader fr = new FileReader(file);
-    public BufferedReader br = new BufferedReader(fr);
+    //public FileReader fr = new FileReader(file);
 
     public RepositoryPersona() throws IOException {
     }
@@ -25,10 +25,10 @@ public class RepositoryPersona implements IrepositoryPersona, Serializable {
 
     @Override
     public void inserisciPersonaFile(Persona persona) throws IOException, ClassNotFoundException {
-        FileWriter fw = new FileWriter("tempDb.txt", true);
+        FileWriter fw = new FileWriter(file, true);
 
         try {
-            fw.append(persona.getNome() + "," + persona.getCognome() + "|");
+            fw.append(persona.getNome()).append(",").append(persona.getCognome()).append("|");
             fw.close();
 
         } catch (IOException ex) {
@@ -36,21 +36,25 @@ public class RepositoryPersona implements IrepositoryPersona, Serializable {
         }
 
         lista.add(persona);
+        System.out.println("La lista e " + lista);
     }
 
 
     @Override
     public List<Persona> leggiPersonaFile() throws IOException, ClassNotFoundException {
         List<Persona> personaList = new ArrayList<>();
-        Path fileName = Path.of("tempDb.txt");
+        Path fileName = Path.of("src\\main\\resources\\tempDb.txt");
         String dataString = Files.readString(fileName);
+        //nome , cognome|n1 , c1 | n2, c2...|
         String[] data = dataString.split("\\|");
         for (String personaString : data) {
+            // {nome , cognome}
+
             String[] nomeCognome = personaString.split(",");
             String nome = nomeCognome[0];
             String cognome = nomeCognome[1];
             personaList.add(new Persona(nome, cognome));
-//            System.out.println(nome + " " + cognome);
+            System.out.println(nome + " " + cognome);
         }
 
         return personaList;
