@@ -8,23 +8,26 @@ import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
 
 public class RepositoryPersona implements IrepositoryPersona, Serializable {
 
-
-    File file = new File("src\\main\\resources\\tempDb.txt");
-    String filename = "src\\main\\resources\\tempDb.txt";
+    File file = new File("classpath: ./tempDb.txt");
+    private Path path;
+    List<String> lines = Files.readAllLines(path);
+    String filename = "classpath: ./tempDb.txt";
     private ArrayList<Persona> lista = new ArrayList<Persona>();
-    //public FileReader fr = new FileReader(file);
+    //String file = ".\\src\\main\\resources\\tempDb.txt";
+    public FileWriter fw = new FileWriter(file, true);
+    public BufferedWriter bw = new BufferedWriter(fw);
 
     public RepositoryPersona() throws IOException {
     }
 
-
     @Override
     public void inserisciPersonaFile(Persona persona) throws IOException, ClassNotFoundException {
+
         FileWriter fw = new FileWriter(file, true);
 
         try {
@@ -37,24 +40,29 @@ public class RepositoryPersona implements IrepositoryPersona, Serializable {
 
         lista.add(persona);
         System.out.println("La lista e " + lista);
+
     }
 
 
     @Override
     public List<Persona> leggiPersonaFile() throws IOException, ClassNotFoundException {
         List<Persona> personaList = new ArrayList<>();
-        Path fileName = Path.of("src\\main\\resources\\tempDb.txt");
+        Path fileName = Path.of("classpath: ./tempDb.txt");
         String dataString = Files.readString(fileName);
         //nome , cognome|n1 , c1 | n2, c2...|
         String[] data = dataString.split("\\|");
         for (String personaString : data) {
+
+            if (personaString.isEmpty())
+                break;
             // {nome , cognome}
 
-            String[] nomeCognome = personaString.split(",");
-            String nome = nomeCognome[0];
-            String cognome = nomeCognome[1];
-            personaList.add(new Persona(nome, cognome));
-            System.out.println(nome + " " + cognome);
+            String[] idNomeCognome = personaString.split(",");
+            int id = Integer.parseInt(idNomeCognome[0]);
+            String nome = idNomeCognome[1];
+            String cognome = idNomeCognome[2];
+            personaList.add(new Persona(id, nome, cognome));
+            System.out.println(id + "-" + nome + " " + cognome);
         }
 
         return personaList;
@@ -62,24 +70,25 @@ public class RepositoryPersona implements IrepositoryPersona, Serializable {
 
     @Override
     public Persona modificaPersonaFile(Persona persona) throws IOException {
-        Persona newPersona = new Persona("", "");
-
-        String oldName = "oLD NAME";
-        String oldSurname = "OLD SURNAME";
+        Persona newPersona = new Persona(persona.getId(), "", "");
+        Scanner scan = new Scanner(System.in);
         for (int i = 0; i < lista.size(); i++) {
             Persona persona1 = lista.get(i);
-            if (persona1.getNome().equals(oldName) && persona1.getCognome().equals(oldSurname)) {
-                persona1.setNome(persona.getNome());
-                persona1.setCognome(persona.getCognome());
-                newPersona.setNome(persona.getNome());
-                newPersona.setCognome(persona.getCognome());
+            if (persona1.getId() == persona.getId()) {
+                System.out.println("INSERISCI IL NOVO NOME: ");
+                String nome1 = scan.next();
+                System.out.println("INSERISCI IL NUOVO COGNOME: ");
+                String cognome1 = scan.next();
 
+                persona1.setId(persona.getId());
+                persona1.setNome(nome1);
+                persona1.setCognome(cognome1);
+                newPersona.setNome(nome1);
+                newPersona.setCognome(cognome1);
                 lista.set(i, persona1);
-
                 break;  // for loop
             }
         }
-
         Path path = Path.of(filename);
         try {
             Files.delete(path);
@@ -94,15 +103,13 @@ public class RepositoryPersona implements IrepositoryPersona, Serializable {
         FileWriter fw = new FileWriter(filename);
         try {
             for (Persona persona1 : lista) {
-                fw.write(persona1.getNome() + "," + persona1.getCognome() + "|");
+                fw.write(persona1.getId() + "-" + persona1.getNome() + "," + persona1.getCognome() + "|");
             }
-
             fw.close();
 
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-
         return newPersona;
     }
 
@@ -111,9 +118,8 @@ public class RepositoryPersona implements IrepositoryPersona, Serializable {
 
         for (int i = 0; i < lista.size(); i++) {
             Persona persona1 = lista.get(i);
-            if (persona1.getNome().equals(persona.getNome()) && persona1.getCognome().equals(persona.getCognome())) {
+            if (persona1.getId() == (persona.getId())) {
                 lista.remove(i);
-
                 break;  // for loop
             }
         }
@@ -133,9 +139,8 @@ public class RepositoryPersona implements IrepositoryPersona, Serializable {
         FileWriter fw = new FileWriter(filename);
         try {
             for (Persona persona1 : lista) {
-                fw.write(persona1.getNome() + "," + persona1.getCognome() + "|");
+                fw.write(persona1.getId() + "-" + persona1.getNome() + "," + persona1.getCognome() + "|");
             }
-
             fw.close();
 
         } catch (IOException ex) {

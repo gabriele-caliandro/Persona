@@ -17,14 +17,11 @@ public class PersoneController implements IpersonaController {
 
     @Override
     public void inserisci(Persona persona) throws IOException, ClassNotFoundException {
-        Persona personaToFile = new Persona(persona.getNome(),persona.getCognome());
+        Persona personaToFile = new Persona(persona.getId(), persona.getNome(), persona.getCognome());
+
         repositoyController.inserisciPersonaFile(personaToFile);
+
         lista.add(persona);
-
-        // inderire nella db
-
-        //System.out.println(lista);
-
     }
 
     @Override
@@ -32,56 +29,60 @@ public class PersoneController implements IpersonaController {
 
         Iterator<Persona> i = lista.iterator();
         if (lista.isEmpty()) {
-            System.out.println("La lista e vuota,non ci sono persone da visualizzare");
+            System.out.println("----------------------------------------------------");
+            System.out.println("LISTA VUOTA");
+            System.out.println("----------------------------------------------------");
         } else {
             while (i.hasNext()) {
                 Persona p = i.next();
                 System.out.println(p);
             }
-        } repositoyController.leggiPersonaFile();
+        }
+        repositoyController.leggiPersonaFile();
         return null;
     }
 
     @Override
-    public boolean cancella(Persona persona) throws IOException {
+    public boolean cancella(int idCancellare) throws IOException {
 
         boolean bool = false;
-        String n = persona.getNome();
-        String c = persona.getCognome();
-
         Iterator<Persona> i = lista.iterator();
         while (i.hasNext()) {
             Persona p = i.next();
-            if (p.getNome().equals(n) && (p.getCognome().equals(c))) {
+            if (p.getId() == idCancellare) {
                 i.remove();
                 bool = true;
-                repositoyController.cancellaPersonaFIle(new Persona(n,c));
-                System.out.println("Nome " + n + " " + c + " cancellati con successo");
+                // repositoyController.cancellaPersonaFIle(new Persona(n, c));
+                System.out.println("ID " + idCancellare + " INSERITO, CANCELLATO CON SUCCESSO");
             } else {
-                System.out.println("nome richiesto non trovato");
+                bool = false;
             }
-
-            bool = false;
         }
 
         return bool;
-
     }
 
     @Override
-    public Persona modifica(Persona persona) {
-
-        ListIterator<Persona> li = lista.listIterator();
-        String n1 = persona.getNome();
-        String c1 = persona.getCognome();
-        for (Persona p : lista) {
-            if (p.getNome().equals(n1) && (p.getCognome().equals(c1))) {
-                li.set(new Persona(n1, c1));
-                System.out.println("Nome " + n1 + " " + c1 + " modificato con successo");
+    public boolean modifica(int idModificare) {
+        boolean bool = false;
+        Scanner scan = new Scanner(System.in);
+        for (int i = 0; i < lista.size(); i++) {
+            Persona persona1 = lista.get(i);
+            if (persona1.getId() == (idModificare)) {
+                System.out.println("INSERISCI IL NOVO NOME: ");
+                String nome1 = scan.next();
+                System.out.println("INSERISCI IL NUOVO COGNOME: ");
+                String cognome1 = scan.next();
+                persona1.setNome(nome1);
+                persona1.setCognome(cognome1);
+                lista.set(i, persona1);
+                System.out.println("ID  " + idModificare + "  " + nome1 + " " + cognome1 + " " + "MODIFICATO CORRETTAMENTE");
+                bool = true;
             } else {
-                System.out.println("nome richiesto non trovato");
+                bool = false;
             }
         }
-        return (persona);
+        return bool;
     }
+
 }

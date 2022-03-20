@@ -10,6 +10,9 @@ public class Main {
 
     public static void main(String[] args) throws IOException, ClassNotFoundException {
 
+
+        Random rand = new Random();
+        int maxNumber = 100000;
         Scanner scan = new Scanner(System.in);
         PersoneController personac = new PersoneController();
 
@@ -20,24 +23,23 @@ public class Main {
             System.out.println("2.VISSUALIZZA");
             System.out.println("3.CANCELLA");
             System.out.println("4.MODIFICA");
-            System.out.println("UN ALTRO NR PER USCIRE");
+            System.out.println("0.USCITA");
             System.out.println("--------------------------------");
-            System.out.println("Inserisci la sua scelta :");
-            // scelta = scan.nextInt();
+            System.out.println("INSERISCI LA SUA OPZIONE :");
             scelta = scan.nextInt();
 
 
             switch (scelta) {
 
                 case 1://INSERISCI
-                    System.out.println("Inserisi il nome");
+                    System.out.println("INSERISCI IL NOME:");
                     String nome = scan.next();
 
-                    System.out.println("Inserisi il cognome");
+                    System.out.println("INSERISCI IL COGNOME");
                     String cognome = scan.next();
 
-                    personac.inserisci(new Persona(nome, cognome));
-
+                    int id = rand.nextInt(maxNumber) + 1;
+                    personac.inserisci(new Persona(id,nome, cognome));
 
 
                     break;
@@ -46,22 +48,18 @@ public class Main {
                     break;
 
                 case 3://CANCELLA
-                    System.out.println("Inserisci il nome da cancellare.");
-                    String nome1 = scan.next();
-                    System.out.println("Inserisi il cognome");
-                    String cognome1 = scan.next();
-
-                    personac.cancella(new Persona(nome1,cognome1));
-
+                    System.out.println("INSERISCI L'ID PERSONA DA CANCELLARE.");
+                    int idCancellare = scan.nextInt();
+                    personac.cancella(idCancellare);
                     break;
 
                 case 4://MODIFICA
-                    System.out.println("Inserisci il nome da modificare.");
-                    String nome2 = scan.next();
-                    System.out.println("Inserisi il cognome");
-                    String cognome2 = scan.next();
+                    System.out.println("INSERISCI L'ID PERSONA DA MODIFICARE.");
+                    int idModificare = scan.nextInt();
 
-                    personac.modifica(new Persona(nome2,cognome2));
+                    if (!(personac.modifica(idModificare))){
+                        System.out.println("ID NON TROVATO");
+                    }
 
                     break;
                 case 0:
@@ -69,8 +67,8 @@ public class Main {
                     break;
             }
         }
-        while (scelta == 1 || scelta == 2 || scelta == 3 || scelta == 4);
-     //   while (!end);
+        // while (scelta == 1 || scelta == 2 || scelta == 3 || scelta == 4);
+        while (!end);
     }
 }
 

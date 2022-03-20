@@ -2,7 +2,6 @@ package it.itcubeconsulting.progettoPersona.repository;
 
 import it.itcubeconsulting.progettoPersona.model.Persona;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
