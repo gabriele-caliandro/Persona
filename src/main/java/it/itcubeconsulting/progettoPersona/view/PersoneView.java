@@ -7,7 +7,7 @@ public class PersoneView {
 
   public void PrintDettagliPersona(String nome, String congnome) {
     System.out.println("msg");
-    System.out.println("Modifica di prova");
+    System.out.println("conflict");
   }
 
 }
